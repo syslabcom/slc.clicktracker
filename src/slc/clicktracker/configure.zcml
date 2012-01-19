@@ -1,0 +1,18 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:five="http://namespaces.zope.org/five"
+    i18n_domain="slc.clicktracker">
+
+    <include package=".browser" />
+
+    <genericsetup:registerProfile
+        name="default"
+        title="slc.clicktracker"
+        directory="profiles/default"
+        description="Quick Changenote"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+</configure>
