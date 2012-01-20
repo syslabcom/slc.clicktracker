@@ -2,16 +2,23 @@
       i18n:domain="emas.theme" >
 <body>
     <div metal:fill-slot="main"
-         tal:define="tracked view/tracked">
-        <tal:tracked condition="tracked">
+         tal:define="tracked view/tracked;
+                     isdirectlytracked view/isdirectlytracked">
+        <tal:tracked condition="nocall:tracked">
+            <div class="tracking-indirect"
+                 tal:condition="not:isdirectlytracked">
+                This content is tracked because
+                <a tal:attributes="href string:${tracked/absolute_url}/@@tracking"
+                   tal:content="tracked/Title">Tatjana</a> is tracked.
+            </div>
             TODO: Some stats here about viewership
             <form tal:attributes="action string:${context/absolute_url}/@@tracking"
-                  method="post">
+                  method="post" tal:condition="isdirectlytracked">
                 <input type="hidden" name="disable" value="1" />
                 <input type="submit" value="Disable Tracking" class="context" />
             </form>
         </tal:tracked>
-        <tal:untracked condition="not:tracked">
+        <tal:untracked condition="not:nocall:tracked">
             <form tal:attributes="action string:${context/absolute_url}/@@tracking"
                   method="post">
                 <input type="hidden" name="enable" value="1" />
