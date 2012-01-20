@@ -19,4 +19,11 @@
         permission="zope2.View"
         />
 
+    <browser:page
+        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+        name="clicktracker-settings"
+        class=".views.ClickTrackerControlPanel"
+        permission="cmf.ManagePortal" 
+        />
+
 </configure>

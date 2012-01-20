@@ -1,6 +1,8 @@
 import psycopg2
-from slc.clicktracker.interfaces import IClickStorage
+from zope.component import queryUtility
 from zope.interface import implements
+from plone.registry.interfaces import IRegistry
+from slc.clicktracker.interfaces import IClickStorage, IClickTrackerSettings
 
 class PostgresqlStorage(object):
 
@@ -9,12 +11,20 @@ class PostgresqlStorage(object):
     def __init__(self):
         self.connection = None
 
+    def getSettings(self):
+        registry = queryUtility(IRegistry)
+        if registry is None:
+            return None
+        return registry.forInterface(IClickTrackerSettings)
+
     def connect(self):
+        self.connection = None
         try:
-            # TODO: Configure dsn from plone.registry
-            self.connection = psycopg2.connect("dbname=izak")
+            settings = self.getSettings()
+            if settings is not None and settings.dsn is not None:
+                self.connection = psycopg2.connect(settings.dsn)
         except psycopg2.OperationalError:
-            self.connection = None
+            pass
 
     @property
     def connected(self):

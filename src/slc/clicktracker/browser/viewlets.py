@@ -5,3 +5,7 @@ class JSTrackerViewlet(ViewletBase):
     """ Adds a bit of javascript to the top of the page with tracking code.
     """
     index = ViewPageTemplateFile('tracker.pt')
+
+    def enabled():
+        # TODO check for marker interface
+        return True

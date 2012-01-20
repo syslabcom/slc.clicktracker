@@ -1,4 +1,6 @@
+from zope.schema import TextLine
 from zope.interface import Interface
+from slc.clicktracker import MessageFactory as _
 
 class IClickTrackerLayer(Interface):
     """Marker Interface used by as BrowserLayer
@@ -9,3 +11,13 @@ class IClickStorage(Interface):
 
     def logAccess(user, url):
         """ Log the given information, user visited url. """
+
+class IClickTrackerSettings(Interface):
+    """ So we can store some settings related to this product and the
+        annotator.
+    """
+    dsn = TextLine(
+        title=_(u'Database DSN'),
+        description=_(u'Define the DSN for connecting to the database.'),
+        required=True
+    );
