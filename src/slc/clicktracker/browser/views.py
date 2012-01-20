@@ -13,7 +13,7 @@ from slc.clicktracker import MessageFactory as _
 class TrackerCallbackView(BrowserView):
     """ This is called via jquery POST. """
     def __call__(self):
-        url = self.request.get('absolute_url', None)
+        url = self.request.get('url', None)
 
         if(url is not None):
             storage = queryUtility(IClickStorage)
