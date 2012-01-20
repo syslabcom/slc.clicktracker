@@ -1,6 +1,8 @@
+<tal:enabled condition="view/enabled">
 <tal:script replace="structure string:<script" /> type="text/javascript"<tal:script replace="structure string:>" />
     jQuery(function($){
         var absolute_url = '<tal:x replace="context/absolute_url" />';
         $.post('@@clicktracker-callback', {absolute_url: absolute_url});
     });
 <tal:script replace="structure string:</script>" />
+</tal:enabled>

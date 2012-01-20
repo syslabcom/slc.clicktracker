@@ -1,0 +1,23 @@
+<html metal:use-macro="here/main_template/macros/master"
+      i18n:domain="emas.theme" >
+<body>
+    <div metal:fill-slot="main"
+         tal:define="tracked view/tracked">
+        <tal:tracked condition="tracked">
+            TODO: Some stats here about viewership
+            <form tal:attributes="action string:${context/absolute_url}/@@tracking"
+                  method="post">
+                <input type="hidden" name="disable" value="1" />
+                <input type="submit" value="Disable Tracking" class="context" />
+            </form>
+        </tal:tracked>
+        <tal:untracked condition="not:tracked">
+            <form tal:attributes="action string:${context/absolute_url}/@@tracking"
+                  method="post">
+                <input type="hidden" name="enable" value="1" />
+                <input type="submit" value="Enable Tracking" class="context" />
+            </form>
+        </tal:untracked>
+    </div>
+</body>
+</html>

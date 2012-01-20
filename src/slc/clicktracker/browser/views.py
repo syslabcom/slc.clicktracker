@@ -1,8 +1,12 @@
+from Acquisition import aq_inner
 from zope.component import queryUtility
+from zope.interface import alsoProvides, noLongerProvides
 from plone.app.registry.browser.controlpanel import RegistryEditForm
 from plone.app.registry.browser.controlpanel import ControlPanelFormWrapper
 from Products.Five import BrowserView
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from slc.clicktracker.interfaces import IClickStorage, IClickTrackerSettings
+from slc.clicktracker.interfaces import IContentIsTracked
 from slc.clicktracker import MessageFactory as _
 
 class TrackerCallbackView(BrowserView):
@@ -26,3 +30,21 @@ class ClickTrackerSettingsForm(RegistryEditForm):
 
 class ClickTrackerControlPanel(ControlPanelFormWrapper):
     form = ClickTrackerSettingsForm
+
+class TrackingSetupView(BrowserView):
+    index = ViewPageTemplateFile("trackingsetup.pt")
+
+    def tracked(self):
+        context = aq_inner(self.context)
+        return IContentIsTracked.providedBy(context)
+
+    def __call__(self):
+        context = aq_inner(self.context)
+        tracked = IContentIsTracked.providedBy(context)
+
+        if not tracked and self.request.get('enable', None) is not None:
+            alsoProvides(context, IContentIsTracked)
+        elif tracked and self.request.get('disable', None) is not None:
+            noLongerProvides(context, IContentIsTracked)
+
+        return self.index()

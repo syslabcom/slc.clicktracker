@@ -21,3 +21,6 @@ class IClickTrackerSettings(Interface):
         description=_(u'Define the DSN for connecting to the database.'),
         required=True
     );
+
+class IContentIsTracked(Interface):
+    """ Marker interface for tracked content. """

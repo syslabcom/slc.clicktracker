@@ -26,4 +26,12 @@
         permission="cmf.ManagePortal" 
         />
 
+    <browser:page
+        for="*"
+        name="tracking"
+        class=".views.TrackingSetupView"
+        template="trackingsetup.pt"
+        permission="cmf.ManagePortal"
+        />
+
 </configure>
