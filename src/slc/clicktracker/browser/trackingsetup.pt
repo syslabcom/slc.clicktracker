@@ -11,12 +11,28 @@
                 <a tal:attributes="href string:${tracked/absolute_url}/@@tracking"
                    tal:content="tracked/Title">Tatjana</a> is tracked.
             </div>
-            TODO: Some stats here about viewership
+            <tal:direct condition="isdirectlytracked">
+            <tal:log define="log view/log">
+                <h1 class="documentFirstHeading">Access log</h1>
+                <table tal:condition="log" class="listing">
+                    <tr>
+                        <td>Member</td>
+                        <td>Number of Times Accessed</td>
+                        <td>Last Access Time</td>
+                    </tr>
+                    <tr tal:repeat="l log">
+                        <td tal:content="l/member">John</td>
+                        <td tal:content="l/count">1023</td>
+                        <td tal:content="l/lastaccess">2012-01-21 14:58:23</td>
+                    </tr>
+                </table>
+            </tal:log>
             <form tal:attributes="action string:${context/absolute_url}/@@tracking"
-                  method="post" tal:condition="isdirectlytracked">
+                  method="post">
                 <input type="hidden" name="disable" value="1" />
                 <input type="submit" value="Disable Tracking" class="context" />
             </form>
+            </tal:direct>
         </tal:tracked>
         <tal:untracked condition="not:nocall:tracked">
             <form tal:attributes="action string:${context/absolute_url}/@@tracking"

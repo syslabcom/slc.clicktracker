@@ -12,6 +12,9 @@ class IClickStorage(Interface):
     def logAccess(user, url):
         """ Log the given information, user visited url. """
 
+    def getLog(prefix):
+        """ Find records for paths starting with prefix. """
+
 class IClickTrackerSettings(Interface):
     """ So we can store some settings related to this product and the
         annotator.

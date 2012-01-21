@@ -41,3 +41,19 @@ class PostgresqlStorage(Persistent):
                 self.connection.commit()
                 return True
         return False
+
+    def getLog(self, prefix):
+        """ Obtain logged details for paths starting with prefix. """
+        connection = self.connection
+        if connection is not None:
+            cursor = connection.cursor()
+            cursor.execute(
+                "SELECT click.member,SUM(click.count) AS count, "
+                "MAX(click.lastaccess) AS lastaccess FROM click INNER JOIN "
+                "document ON (click.document=document.id) WHERE "
+                "document.url LIKE %(prefix)s GROUP BY click.member",
+                {'prefix': prefix + '%'})
+            li = cursor.fetchall()
+            connection.rollback() # Avoid connection being idle in transaction
+            return li
+        return ()

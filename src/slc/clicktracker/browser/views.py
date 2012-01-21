@@ -5,6 +5,7 @@ from plone.app.registry.browser.controlpanel import RegistryEditForm
 from plone.app.registry.browser.controlpanel import ControlPanelFormWrapper
 from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from Products.CMFPlone.PloneBatch import Batch
 from slc.clicktracker.interfaces import IClickStorage, IClickTrackerSettings
 from slc.clicktracker.interfaces import IContentIsTracked
 from slc.clicktracker.util import contentIsTracked
@@ -44,6 +45,13 @@ class TrackingSetupView(BrowserView):
         """ Returns True if our context is directly tracked. """
         context = aq_inner(self.context)
         return IContentIsTracked.providedBy(context)
+
+    def log(self):
+        storage = queryUtility(IClickStorage)
+        prefix = self.context.absolute_url()
+        log = [{'member': x[0], 'count': x[1], 'lastaccess': x[2].strftime('%Y-%m-%d %H:%M:%S')} \
+            for x in storage.getLog(prefix)]
+        return Batch(log, 20, 0)
 
     def __call__(self):
         context = aq_inner(self.context)
