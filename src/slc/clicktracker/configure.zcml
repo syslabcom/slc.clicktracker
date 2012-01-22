@@ -15,4 +15,8 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
+  <utility
+      provides=".interfaces.IClickStorage"
+      factory=".storage.PostgresqlStorage" />
+
 </configure>

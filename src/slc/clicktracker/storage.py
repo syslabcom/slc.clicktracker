@@ -1,6 +1,5 @@
 from thread import get_ident as get_thread_id
 import psycopg2
-from persistent import Persistent
 from zope.component import queryUtility
 from zope.interface import implements
 from plone.registry.interfaces import IRegistry
@@ -9,7 +8,7 @@ from slc.clicktracker.interfaces import IClickStorage, IClickTrackerSettings
 # mapping from thread-id to a connection, so we have one connection per thread
 POOL = {}
 
-class PostgresqlStorage(Persistent):
+class PostgresqlStorage(object):
 
     implements(IClickStorage)
 
