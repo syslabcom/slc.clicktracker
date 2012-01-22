@@ -16,12 +16,15 @@
                 <h1 class="documentFirstHeading">Access log</h1>
                 <table tal:condition="log" class="listing">
                     <tr>
-                        <td>Member</td>
-                        <td>Number of Times Accessed</td>
-                        <td>Last Access Time</td>
+                        <th>Member</th>
+                        <th>URL</th>
+                        <th>Number of Times Accessed</th>
+                        <th>Last Access Time</th>
                     </tr>
                     <tr tal:repeat="l log">
                         <td tal:content="l/member">John</td>
+                        <td><a tal:attributes="href l/url"
+                           tal:content="l/url">http://localhost/x</a></td>
                         <td tal:content="l/count">1023</td>
                         <td tal:content="l/lastaccess">2012-01-21 14:58:23</td>
                     </tr>
