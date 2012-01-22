@@ -48,13 +48,16 @@ class TrackingSetupView(BrowserView):
         return IContentIsTracked.providedBy(context)
 
     def log(self):
+        b_start = self.request.get('b_start', 0)
+        b_size = self.request.get('b_size', 20)
+
         storage = queryUtility(IClickStorage)
         prefix = '/'.join(self.context.getPhysicalPath())
         log = [{'member': x[0], 'count': x[1],
                 'lastaccess': x[2].strftime('%Y-%m-%d %H:%M:%S'),
                 'url': x[3]} \
             for x in storage.getLog(prefix)]
-        return Batch(log, 20, 0)
+        return Batch(log, b_size, b_start)
 
     def __call__(self):
         context = aq_inner(self.context)
