@@ -1,9 +1,13 @@
+from thread import get_ident as get_thread_id
 import psycopg2
 from persistent import Persistent
 from zope.component import queryUtility
 from zope.interface import implements
 from plone.registry.interfaces import IRegistry
 from slc.clicktracker.interfaces import IClickStorage, IClickTrackerSettings
+
+# mapping from thread-id to a connection, so we have one connection per thread
+POOL = {}
 
 class PostgresqlStorage(Persistent):
 
@@ -17,18 +21,20 @@ class PostgresqlStorage(Persistent):
 
     @property
     def connection(self):
-        if hasattr(self, '_v_connection'):
-            if self._v_connection.closed == 0:
-                return self._v_connection
+        tid = get_thread_id()
+        c = POOL.get(tid, None)
+        if c is not None and c.closed==0:
+            return c
+
         settings = self.getSettings()
         if settings is not None and settings.dsn is not None:
             try:
-                connection = psycopg2.connect(settings.dsn)
+                c = psycopg2.connect(settings.dsn)
             except psycopg2.OperationalError:
                 return None
 
-            self._v_connection = connection
-            return connection
+            POOL[tid] = c
+            return c
 
     def logAccess(self, member, url):
         """ Log the given information, user visited url. """
@@ -54,6 +60,6 @@ class PostgresqlStorage(Persistent):
                 "document.url LIKE %(prefix)s GROUP BY click.member",
                 {'prefix': prefix + '%'})
             li = cursor.fetchall()
-            connection.rollback() # Avoid connection being idle in transaction
+            connection.rollback() # Avoid idle connection in transaction
             return li
         return ()
