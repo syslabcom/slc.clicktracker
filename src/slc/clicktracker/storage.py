@@ -53,10 +53,14 @@ class PostgresqlStorage(object):
                 return True
         return False
 
-    def getLog(self, prefix):
+    def getLog(self, prefix, order_by=None, order_reverse=False):
         """ Obtain logged details for paths starting with prefix. """
         connection = self.connection
         if connection is not None:
+            order = {'member': 'click.member',
+                     'lastaccess': 'lastaccess'}.get(order_by, 'click.member')
+
+
             cursor = connection.cursor()
             try:
                 cursor.execute(
@@ -64,7 +68,8 @@ class PostgresqlStorage(object):
                     "MAX(click.lastaccess) AS lastaccess, click.url FROM "
                     "click INNER JOIN document ON (click.document=document.id) "
                     "WHERE document.path LIKE %(prefix)s GROUP BY "
-                    "click.member, click.url", {'prefix': prefix + '%'})
+                    "click.member, click.url ORDER BY " + order,
+                    {'prefix': prefix + '%'})
             except psycopg2.Error:
                 self.closeConnection()
                 return ()

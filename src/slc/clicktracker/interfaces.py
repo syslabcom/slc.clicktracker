@@ -12,7 +12,7 @@ class IClickStorage(Interface):
     def logAccess(user, path, url):
         """ Log the given information, user visited path with url. """
 
-    def getLog(prefix):
+    def getLog(prefix, order_by=None, order_reverse=False):
         """ Find records for paths starting with prefix. """
 
 class IClickTrackerSettings(Interface):
