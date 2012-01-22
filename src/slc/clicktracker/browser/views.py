@@ -7,7 +7,7 @@ from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.CMFPlone.PloneBatch import Batch
 from slc.clicktracker.interfaces import IClickStorage, IClickTrackerSettings
-from slc.clicktracker.interfaces import IContentIsTracked
+from slc.clicktracker.interfaces import IContentIsTracked, IContentIsIgnored
 from slc.clicktracker.util import contentIsTracked
 from slc.clicktracker import MessageFactory as _
 
@@ -69,4 +69,6 @@ class TrackingSetupView(BrowserView):
         elif self.request.get('disable', None) is not None and directlytracked:
             noLongerProvides(context, IContentIsTracked)
 
+        # Avoid tracking the tracking view
+        alsoProvides(self.request, IContentIsIgnored)
         return self.index()

@@ -27,3 +27,7 @@ class IClickTrackerSettings(Interface):
 
 class IContentIsTracked(Interface):
     """ Marker interface for tracked content. """
+
+class IContentIsIgnored(Interface):
+    """ Glue this onto your request, eg. in a browser view, to disable
+        tracking for that request. Avoid tracking certain views. """
