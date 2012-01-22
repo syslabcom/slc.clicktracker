@@ -11,3 +11,7 @@ class JSTrackerViewlet(ViewletBase):
     def enabled(self):
         context = aq_inner(self.context)
         return contentIsTracked(context) is not None
+
+    def path(self):
+        context = aq_inner(self.context)
+        return '/'.join(context.getPhysicalPath())

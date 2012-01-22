@@ -29,21 +29,27 @@ class PostgresqlStorage(object):
         if settings is not None and settings.dsn is not None:
             try:
                 c = psycopg2.connect(settings.dsn)
+                c.autocommit = True # because we don't exactly need them
             except psycopg2.OperationalError:
                 return None
 
             POOL[tid] = c
             return c
 
-    def logAccess(self, member, url):
-        """ Log the given information, user visited url. """
+    def closeConnection(self):
+        tid = get_thread_id()
+        if POOL.has_key(tid):
+            # This will also close the connection
+            del(POOL[tid])
+
+    def logAccess(self, member, path, url):
+        """ Log the given information, user visited path via url. """
         if self.connection is not None:
             cursor = self.connection.cursor()
             cursor.execute(
-                "SELECT logclick(%(member)s, %(document)s) AS result",
-                {'member': member, 'document': url})
+                "SELECT logclick(%(member)s, %(document)s, %(url)s) AS result",
+                {'member': member, 'document': path, 'url': url})
             if cursor.fetchone()[0]:
-                self.connection.commit()
                 return True
         return False
 
@@ -52,13 +58,17 @@ class PostgresqlStorage(object):
         connection = self.connection
         if connection is not None:
             cursor = connection.cursor()
-            cursor.execute(
-                "SELECT click.member,SUM(click.count) AS count, "
-                "MAX(click.lastaccess) AS lastaccess FROM click INNER JOIN "
-                "document ON (click.document=document.id) WHERE "
-                "document.url LIKE %(prefix)s GROUP BY click.member",
-                {'prefix': prefix + '%'})
+            try:
+                cursor.execute(
+                    "SELECT click.member,SUM(click.count) AS count, "
+                    "MAX(click.lastaccess) AS lastaccess, click.url FROM "
+                    "click INNER JOIN document ON (click.document=document.id) "
+                    "WHERE document.path LIKE %(prefix)s GROUP BY "
+                    "click.member, click.url", {'prefix': prefix + '%'})
+            except psycopg2.Error:
+                self.closeConnection()
+                return ()
+
             li = cursor.fetchall()
-            connection.rollback() # Avoid idle connection in transaction
             return li
         return ()

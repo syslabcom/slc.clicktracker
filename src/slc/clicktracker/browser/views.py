@@ -15,13 +15,14 @@ class TrackerCallbackView(BrowserView):
     """ This is called via jquery POST. """
     def __call__(self):
         url = self.request.get('url', None)
+        path = self.request.get('path', None)
 
-        if(url is not None):
+        if(url is not None and path is not None):
             storage = queryUtility(IClickStorage)
             member = self.context.restrictedTraverse(
                 '@@plone_portal_state').member()
 
-            storage.logAccess(str(member), url)
+            storage.logAccess(str(member), path, url)
         return '' # No content
 
 class ClickTrackerSettingsForm(RegistryEditForm):
@@ -48,8 +49,10 @@ class TrackingSetupView(BrowserView):
 
     def log(self):
         storage = queryUtility(IClickStorage)
-        prefix = self.context.absolute_url()
-        log = [{'member': x[0], 'count': x[1], 'lastaccess': x[2].strftime('%Y-%m-%d %H:%M:%S')} \
+        prefix = '/'.join(self.context.getPhysicalPath())
+        log = [{'member': x[0], 'count': x[1],
+                'lastaccess': x[2].strftime('%Y-%m-%d %H:%M:%S'),
+                'url': x[3]} \
             for x in storage.getLog(prefix)]
         return Batch(log, 20, 0)
 

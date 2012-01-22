@@ -2,7 +2,9 @@
 <tal:script replace="structure string:<script" /> type="text/javascript"<tal:script replace="structure string:>" />
     jQuery(function($){
         var request_url = '<tal:x replace="request/getURL" />';
-        $.post('@@clicktracker-callback', {url: request_url});
+        var path = '<tal:x replace="view/path" />';
+        $.post('@@clicktracker-callback',
+            {url: request_url, path: path});
     });
 <tal:script replace="structure string:</script>" />
 </tal:enabled>

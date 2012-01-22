@@ -9,8 +9,8 @@ class IClickTrackerLayer(Interface):
 class IClickStorage(Interface):
     """ Marker interface for storage utility. """
 
-    def logAccess(user, url):
-        """ Log the given information, user visited url. """
+    def logAccess(user, path, url):
+        """ Log the given information, user visited path with url. """
 
     def getLog(prefix):
         """ Find records for paths starting with prefix. """
