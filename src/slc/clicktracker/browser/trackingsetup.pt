@@ -12,16 +12,16 @@
                    tal:content="tracked/Title">Tatjana</a> is tracked.
             </div>
             <tal:direct condition="isdirectlytracked">
-            <tal:log define="log view/log">
+            <tal:log define="batch view/log">
                 <h1 class="documentFirstHeading">Access log</h1>
-                <table tal:condition="log" class="listing">
+                <table tal:condition="batch" class="listing">
                     <tr>
                         <th>Member</th>
                         <th>URL</th>
                         <th>Number of Times Accessed</th>
                         <th>Last Access Time</th>
                     </tr>
-                    <tr tal:repeat="l log">
+                    <tr tal:repeat="l batch">
                         <td tal:content="l/member">John</td>
                         <td><a tal:attributes="href l/url"
                            tal:content="l/url">http://localhost/x</a></td>
@@ -29,6 +29,7 @@
                         <td tal:content="l/lastaccess">2012-01-21 14:58:23</td>
                     </tr>
                 </table>
+                <div metal:use-macro="context/batch_macros/macros/navigation" />
             </tal:log>
             <form tal:attributes="action string:${context/absolute_url}/@@tracking"
                   method="post">
