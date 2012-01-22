@@ -25,7 +25,7 @@ setup(
     install_requires=[
         'setuptools',
         'Products.CMFPlone',
-        'psycopg2',
+        'psycopg2 >=2.4.2',
     ],
     entry_points="""
         [z3c.autoinclude.plugin]
