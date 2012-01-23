@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<import-steps>
+ <import-step 
+    id="slc.clicktracker-database-setup" 
+    handler="slc.clicktracker.setuphandlers.setupDatabase"
+    title="slc.clicktracker database setup"
+    version="0.1">
+    Import the database schema.
+ </import-step>
+</import-steps>

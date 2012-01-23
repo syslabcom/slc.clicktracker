@@ -7,9 +7,17 @@
 
     <genericsetup:registerProfile
         name="default"
-        title="slc.clicktracker"
+        title="slc.clicktracker default setup"
         directory="profiles/default"
-        description="Click Tracker"
+        description="Click Tracker Default Setup"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+    <genericsetup:registerProfile
+        name="dbsetup"
+        title="slc.clicktracker database setup"
+        directory="profiles/database"
+        description="Click Tracker Database Setup"
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
