@@ -16,7 +16,7 @@
         for="*"
         name="clicktracker-callback"
         class=".views.TrackerCallbackView"
-        permission="zope2.View"
+        permission="cmf.SetOwnProperties"
         />
 
     <browser:page
@@ -31,7 +31,7 @@
         name="tracking"
         class=".views.TrackingSetupView"
         template="trackingsetup.pt"
-        permission="cmf.ManagePortal"
+        permission="slc.ManageTracking"
         />
 
 </configure>
