@@ -11,6 +11,7 @@ setup(
     # Get more strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[
         "Programming Language :: Python",
+        "Framework :: Plone",
         ],
     keywords='CMFEditions flexbox',
     author='Izak Burger, Syslab.com GmbH',
@@ -21,6 +22,7 @@ setup(
     package_dir = {'' : 'src'},
     namespace_packages=['slc'],
     include_package_data=True,
+    package_data={'slc.clicktracker': ['sql/*']},
     zip_safe=False,
     install_requires=[
         'setuptools',
