@@ -4,21 +4,32 @@
     <div metal:fill-slot="main"
          tal:define="tracked view/tracked;
                      isdirectlytracked view/isdirectlytracked">
+        <h1>Tracking</h1>
         <tal:tracked condition="nocall:tracked">
             <div class="tracking-indirect"
                  tal:condition="not:isdirectlytracked">
-                This content is tracked because
+                This content is tracked indirectly because
                 <a tal:attributes="href string:${tracked/absolute_url}/@@tracking"
-                   tal:content="tracked/Title">Tatjana</a> is tracked.
+                   tal:content="tracked/Title">Tatjana</a> is tracked. Click
+                   <a tal:attributes="href string:${tracked/absolute_url}/@@tracking">here</a>
+                   for more information.
+
             </div>
             <tal:direct condition="isdirectlytracked">
+            <div class="tracking-direct">This content is tracked.</div>
+            <form tal:attributes="action string:${context/absolute_url}/@@tracking"
+                  method="post">
+                <input type="hidden" name="disable" value="1" />
+                <input type="submit" value="Disable Tracking" class="context" />
+            </form>
             <tal:log define="batch view/log;
                              sort_on request/sort_on|string:member;
                              sort_reverse request/sort_reverse|string:0;
                              sort_reverse python:int(sort_reverse);
                              mq python:modules['ZTUtils'].make_query">
-                <h1 class="documentFirstHeading">Access log</h1>
-                <table tal:condition="batch" class="listing">
+                <tal:haslog condition="batch">
+                <h2 class="documentFirstHeading">Access log</h2>
+                <table class="listing">
                     <tr>
                         <th tal:define="qs python:mq(b_start=request.get('b_start', 0), sort_on='member', sort_reverse=((sort_on=='member' and not sort_reverse) and '1' or '0'))">
                             <a tal:attributes="href string:${context/absolute_url}/@@tracking?${qs}">Member</a>
@@ -41,16 +52,15 @@
                         <td tal:content="l/lastaccess">2012-01-21 14:58:23</td>
                     </tr>
                 </table>
+                </tal:haslog>
                 <div metal:use-macro="context/batch_macros/macros/navigation" />
             </tal:log>
-            <form tal:attributes="action string:${context/absolute_url}/@@tracking"
-                  method="post">
-                <input type="hidden" name="disable" value="1" />
-                <input type="submit" value="Disable Tracking" class="context" />
-            </form>
             </tal:direct>
         </tal:tracked>
         <tal:untracked condition="not:nocall:tracked">
+            <div class="tracking-nottracked">
+                This content is untracked.
+            </div>
             <form tal:attributes="action string:${context/absolute_url}/@@tracking"
                   method="post">
                 <input type="hidden" name="enable" value="1" />
