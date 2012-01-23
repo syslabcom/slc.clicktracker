@@ -58,6 +58,8 @@ class PostgresqlStorage(object):
         connection = self.connection
         if connection is not None:
             order = {'member': 'click.member',
+                     'url': 'click.url',
+                     'count': 'count',
                      'lastaccess': 'lastaccess'}.get(order_by, 'click.member')
 
 
@@ -68,7 +70,8 @@ class PostgresqlStorage(object):
                     "MAX(click.lastaccess) AS lastaccess, click.url FROM "
                     "click INNER JOIN document ON (click.document=document.id) "
                     "WHERE document.path LIKE %(prefix)s GROUP BY "
-                    "click.member, click.url ORDER BY " + order,
+                    "click.member, click.url ORDER BY " + order + \
+                    (order_reverse and " DESC" or ""),
                     {'prefix': prefix + '%'})
             except psycopg2.Error:
                 self.closeConnection()

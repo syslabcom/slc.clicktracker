@@ -50,13 +50,15 @@ class TrackingSetupView(BrowserView):
     def log(self):
         b_start = self.request.get('b_start', 0)
         b_size = self.request.get('b_size', 20)
+        sort_on = self.request.get('sort_on', 'member')
+        sort_reverse = self.request.get('sort_reverse', '0') == '1'
 
         storage = queryUtility(IClickStorage)
         prefix = '/'.join(self.context.getPhysicalPath())
         log = [{'member': x[0], 'count': x[1],
                 'lastaccess': x[2].strftime('%Y-%m-%d %H:%M:%S'),
                 'url': x[3]} \
-            for x in storage.getLog(prefix)]
+            for x in storage.getLog(prefix, order_by=sort_on, order_reverse=sort_reverse)]
         return Batch(log, b_size, b_start)
 
     def __call__(self):

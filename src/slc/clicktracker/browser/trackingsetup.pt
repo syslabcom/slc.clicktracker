@@ -12,14 +12,26 @@
                    tal:content="tracked/Title">Tatjana</a> is tracked.
             </div>
             <tal:direct condition="isdirectlytracked">
-            <tal:log define="batch view/log">
+            <tal:log define="batch view/log;
+                             sort_on request/sort_on|string:member;
+                             sort_reverse request/sort_reverse|string:0;
+                             sort_reverse python:int(sort_reverse);
+                             mq python:modules['ZTUtils'].make_query">
                 <h1 class="documentFirstHeading">Access log</h1>
                 <table tal:condition="batch" class="listing">
                     <tr>
-                        <th>Member</th>
-                        <th>URL</th>
-                        <th>Number of Times Accessed</th>
-                        <th>Last Access Time</th>
+                        <th tal:define="qs python:mq(b_start=request.get('b_start', 0), sort_on='member', sort_reverse=((sort_on=='member' and not sort_reverse) and '1' or '0'))">
+                            <a tal:attributes="href string:${context/absolute_url}/@@tracking?${qs}">Member</a>
+                        </th>
+                        <th tal:define="qs python:mq(b_start=request.get('b_start', 0), sort_on='url', sort_reverse=((sort_on=='url' and not sort_reverse) and '1' or '0'))">
+                            <a tal:attributes="href string:${context/absolute_url}/@@tracking?${qs}">URL</a>
+                        </th>
+                        <th tal:define="qs python:mq(b_start=request.get('b_start', 0), sort_on='count', sort_reverse=((sort_on=='count' and not sort_reverse) and '1' or '0'))">
+                            <a tal:attributes="href string:${context/absolute_url}/@@tracking?${qs}">Number of Times Accessed</a>
+                        </th>
+                        <th tal:define="qs python:mq(b_start=request.get('b_start', 0), sort_on='lastaccess', sort_reverse=((sort_on=='lastaccess' and not sort_reverse) and '1' or '0'))">
+                            <a tal:attributes="href string:${context/absolute_url}/@@tracking?${qs}">Last Access Time</a>
+                        </th>
                     </tr>
                     <tr tal:repeat="l batch">
                         <td tal:content="l/member">John</td>
