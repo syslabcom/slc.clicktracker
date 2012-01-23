@@ -39,7 +39,8 @@ Database initialisation
 After creating a new database for tracking purposes, you need to activate the
 plpgsql language for this database. You should then load the db.sql into your
 newly created database. This contains all the table definitions and the stored
-procedure that does the actual work. An example is provided below.
+procedure that does the actual work. For ease of use, there is also a
+GenericSetup step for this. An example is provided below.
 
 Example Postgresql Configuration
 ================================
@@ -71,14 +72,20 @@ zope:
 
     createlang plpgsql tracking
 
-5. As the zope user, load db.sql
-
-    psql tracking < db.sql
-
-6. Configure slc.clicktracker with the DSN:
+5. In your plone site, Configure go to Site Setup, ClickTracker Setings, then
+configure slc.clicktracker with the DSN:
 
     dbname=tracking
+
+6. Now go to portal_setup, click the Import tab, then choose "slc.clicktracker
+database setup" from the dropdown, and import all steps.
 
 That's it. The mentioned default installation of Postgresql uses "ident"
 authentication, which means there is no need to specify a user name and
 password, all it needs is the name of the database.
+
+NB: Please note that the above won't work if postgresql is installed on a host
+other than localhost, if you run a distribution where postgresql is not set up
+to do ident authentication be default, or if you're running Windows. In that
+case, please consult the postgresql documentation for details on the
+pg_hba.conf file, and the psycopg2 documentation for details on the dsn.
