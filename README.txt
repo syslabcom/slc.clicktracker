@@ -7,6 +7,13 @@ what pages. The basic use case for this is to make sure people in your
 organisation actually read a document before they vote against it in a
 meeting.
 
+Why javascript? It introduces no delays in the loading of pages, instead
+deferring the collection of stats to an aysnchronous process that happens after
+the page loads. It also ensures that stats are collected from real browsers and
+it is in a sense more accurate, it only registers a payload after the page was
+successfully rendered client side. It is of course easy to avoid being logged,
+but the idea is to check for positive evidence, people who did read it.
+
 Pluggable storage layer
 =======================
 
@@ -29,18 +36,19 @@ on during the request, before any content is generated.
 Configuration
 =============
 
-The postgresl configuration is stored in te plone registry. There is a
-configlet in the plone control panel (Site Setup). The format of the DSN is as
-described in the psycopg2 manual at http://initd.org/psycopg/docs/.
+The postgresl configuration is stored in the plone registry. There is a
+configlet in the plone control panel (Site Setup) where you can set the DSN
+for connecting to the database server. The format of the DSN is as described in
+the psycopg2 manual at http://initd.org/psycopg/docs/.
 
 Database initialisation
 =======================
 
 After creating a new database for tracking purposes, you need to activate the
-plpgsql language for this database. You should then load the db.sql into your
+plpgsql language for this database. You should then load sql/db.sql into your
 newly created database. This contains all the table definitions and the stored
 procedure that does the actual work. For ease of use, there is also a
-GenericSetup step for this. An example is provided below.
+GenericSetup step to automate this. An example is provided below.
 
 Example Postgresql Configuration
 ================================
@@ -72,8 +80,8 @@ zope:
 
     createlang plpgsql tracking
 
-5. In your plone site, Configure go to Site Setup, ClickTracker Setings, then
-configure slc.clicktracker with the DSN:
+5. In your plone site, go to Site Setup, ClickTracker Setings, then configure
+slc.clicktracker with the DSN:
 
     dbname=tracking
 
