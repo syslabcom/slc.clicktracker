@@ -58,6 +58,11 @@ authentication. Here is a simple step-by-step guide to configure
 slc.clicktracker for a standard (as it ships for Debian based Linux
 distributions) postgresql installation.
 
+0. You need to install postgresql if you haven't done so yet. You will also
+need the development headers. To do this on a Debian/Ubuntu machine type:
+
+    sudo apt-get install postgresql libpq-dev
+
 1. Become the postgresql user:
 
     sudo -u postgres -i
