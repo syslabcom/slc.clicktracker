@@ -1,8 +1,8 @@
 include *.txt
-graft slc/clicktracker/profiles
-graft slc/clicktracker/sql
-graft slc/clicktracker/browser
-recursive-include slc/clicktracker *.zcml
-recursive-include slc/clicktracker *.dtml
-recursive-include slc/clicktracker/locales *.mo
-recursive-include slc/clicktracker/locales *.po
+graft src/slc/clicktracker/profiles
+graft src/slc/clicktracker/sql
+graft src/slc/clicktracker/browser
+recursive-include src/slc/clicktracker *.zcml
+recursive-include src/slc/clicktracker *.dtml
+recursive-include src/slc/clicktracker/locales *.mo
+recursive-include src/slc/clicktracker/locales *.po
