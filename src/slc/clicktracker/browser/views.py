@@ -1,4 +1,5 @@
 from Acquisition import aq_inner
+from plone import api
 from zope.component import queryUtility
 from zope.interface import alsoProvides, noLongerProvides
 from plone.app.registry.browser.controlpanel import RegistryEditForm
@@ -19,10 +20,7 @@ class TrackerCallbackView(BrowserView):
 
         if(url is not None and path is not None):
             storage = queryUtility(IClickStorage)
-            member = self.context.restrictedTraverse(
-                '@@plone_portal_state').member()
-
-            storage.logAccess(str(member), path, url)
+            storage.logAccess(api.user.get_current().id, path, url)
         return '' # No content
 
 class ClickTrackerSettingsForm(RegistryEditForm):

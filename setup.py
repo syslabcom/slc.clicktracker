@@ -28,6 +28,7 @@ setup(
         'setuptools',
         'Products.CMFPlone',
         'psycopg2 >=2.4.2',
+        'plone.api',
     ],
     entry_points="""
         [z3c.autoinclude.plugin]
